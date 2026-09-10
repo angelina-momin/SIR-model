@@ -8,3 +8,9 @@ class DiseaseModel(Model):
         self.num_agents = num_agents
 
         Human.create_agents(model=self, n)
+
+    def step(self):
+        """ Advances the model by one step (one day) """
+
+        self.agents.shuffle_do("step")
+        
