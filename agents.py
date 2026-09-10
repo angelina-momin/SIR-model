@@ -1,6 +1,12 @@
+from enum import Enum
 from mesa import Agent
 
 import config 
+
+class State(Enum):
+    SUSCEPTIBLE = 0
+    INFECTED = 1
+    RECOVERED = 2
 
 # Creating a human agent with three states- susceptible, infected and
 # recovered represented as booleans
@@ -10,9 +16,7 @@ class Human(Agent):
         Agent.__init__(self, model)
 
         # Initially all agents are susceptible
-        self.susceptible = 1
-        self.infected = 0 
-        self.recovered = 0
+        self.state = State.SUSCEPTIBLE
 
         self.update_color()
 
@@ -22,12 +26,14 @@ class Human(Agent):
 
     def susceptible_to_infected(self):
         """ Susceptible individuals become infected """
-        if self.susceptible == 1:
-            self.susceptible = 0
-            self.infected = 1
+        if self.state = State.SUSCEPTIBLE:
+            self.state = State.INFECTED
+
 
     def infected_to_recovered(self):
         """ Infected individuals recover """
+        if self.state = State.INFECTED:
+            self.state = State.RECOVERED
 
     def update_color(self):
         """ Updates agents' color based on which SIR compartment
