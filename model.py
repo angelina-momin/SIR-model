@@ -1,5 +1,6 @@
 from mesa import Model
 from mesa import MultiGrid
+from mesa.time import RandomActivation
 
 from agents import Human
 
@@ -8,6 +9,7 @@ class DiseaseModel(Model):
     def __init__(self, n, width, height):
         super().__init__(rng=rng)
         self.no_agents = n
+        self.schedule = RandomActivitation(self) # Random selection of agents
 
         # Creating grid where the agents can move
         self.grid = MultiGrid(width, height, True)
