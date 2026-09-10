@@ -10,6 +10,8 @@ class DiseaseModel(Model):
         super().__init__(rng=rng)
         self.no_agents = n
         self.schedule = RandomActivitation(self) # Random selection of agents
+        
+        self.running =True # Necessary to run the model
 
         # Creating grid where the agents can move
         self.grid = MultiGrid(width, height, True)
