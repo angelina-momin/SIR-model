@@ -1,4 +1,5 @@
 from mesa import Model
+from mesa import MultiGrid
 
 from agents import Human
 
@@ -11,7 +12,14 @@ class DiseaseModel(Model):
         # Creating grid where the agents can move
         self.grid = MultiGrid(width, height, True)
 
-        Human.create_agents(model=self, n)
+        # Creating agents 
+        for i in range(self.no_agents):
+            human = Human(i, self)
+
+            # Place agent in random grid cell
+            x = self.random.randrange(self.grid.width)
+            y = self.random.randrange(self.grid.height)
+            self.grid.place_agent(human, (x, y))
 
     def step(self):
         """ Advances the model by one step (one day) """
