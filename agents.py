@@ -39,11 +39,7 @@ class Human(Agent):
         """ Updates agents' color based on which SIR compartment
         they belong to """
 
-        if self.susceptible == 1:
-            self.color = DICT_COLOR_AGENTS["susceptible"]
-
-        else:
-            self.color = DICT_COLOR_AGENTS["infected"]
+        self.color = DICT_COLOR_AGENTS[self.state]
 
     def step(self):
         """ The behavior of the agents in a single step of the model """
