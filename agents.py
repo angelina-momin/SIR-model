@@ -1,10 +1,6 @@
 from mesa import Agent
 
-DICT_COLOR_AGENTS = {
-    "susceptible": "green",
-    "infected": "red",
-    "recovered": "yellow"
-}
+import config 
 
 # Creating a human agent with three states- susceptible, infected and
 # recovered represented as booleans
