@@ -1,16 +1,24 @@
 from mesa import Agent
 
+DICT_COLOR_AGENTS = {
+    "susceptible": "green",
+    "infected": "red",
+    "recovered": "yellow"
+}
+
 # Creating a human agent with three states- susceptible, infected and
 # recovered represented as booleans
 class Human(Agent):
-    def __init__(self, model):
+    def __init__(self, model, state):
         """ Initializes a Human instance"""
         Agent.__init__(self, model)
 
-        # Initially are susceptible
+        # Initially all agents are susceptible
         self.susceptible = 1
         self.infected = 0 
         self.recovered = 0
+
+        self.update_color()
 
     def move(self):
         """ Move the agent to a random neighboring cell """
@@ -23,11 +31,11 @@ class Human(Agent):
     def infected_to_recovered(self):
         """ Infected individuals recover """
 
-        
-
     def update_color(self):
         """ Updates agents' color based on which SIR compartment
         they belong to """
+
+        self.color = DICT_COLOR_AGENTS["susceptible"]
 
     def step(self):
         """ The behavior of the agents in a single step of the model """
