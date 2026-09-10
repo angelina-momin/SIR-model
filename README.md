@@ -1,8 +1,8 @@
 # SIR-model
 
 ## The model
-This is a SIR model with a starting population of $N$. 
-Each individual belongs to one of these three compartments: 
+This project models a agent-based SIR model to simulate the spread of a disease in population of size $N$ over time $t$.
+In the model, each individual belongs to one of these three compartments: 
 susceptible ($S$), infected ($I$) and recovered ($R$).
 
 The deterministic differential equations governing the model are:
