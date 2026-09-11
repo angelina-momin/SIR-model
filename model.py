@@ -20,6 +20,10 @@ class DiseaseModel(Model):
         self.running =True # Necessary to run the model
         Human.create_agents(model=self, n=n)
 
+        # Assuming only one individual is infected initially
+        infc_agent = self.random.sample(list(self.agents), 1)[0]
+        infc_agent.state = config.State.INFECTED
+
         # Initializing the output file
         self.output_csv_path = f'{config.OUTPUT_DIR}/output.csv'
         with open(self.output_csv_path, mode="w", newline='') as file:
@@ -38,26 +42,39 @@ class DiseaseModel(Model):
             writer = csv.writer(file)
             writer.writerow([tick, tot_sus, tot_inf, tot_rec])
 
+    def calculate_p_infc(self):
+        tot_inf = sum(1 for a in self.agents if a.state == config.State.INFECTED)
+        p = self.beta * tot_inf / self.no_agents
+        return p
+
     def infect_susceptible(self):
         """ Returns number of susceptible individuals who will be infected.
         The number is a drawn sample from a binomial distribution. """
-        tot_sus = sum(1 for a in self.agents if a.state == config.State.SUSCEPTIBLE)
-        no_chosen_agents = np.random.binomial(tot_sus, self.beta)
+
+        p_infc = self.calculate_p_infc()
+
+        sus_agents = [agent for agent in self.agents if agent.state == config.State.SUSCEPTIBLE]
+        
+        no_sus_agents = len(sus_agents)
+        no_chosen_agents = np.random.binomial(no_sus_agents, p_infc)
 
         # Pick random susceptible agents and change state
-        susceptible = [agent for agent in self.agents if agent.state == config.State.SUSCEPTIBLE]
-
-        chosen = self.random.sample(susceptible, no_chosen_agents)
+        chosen = self.random.sample(sus_agents, no_chosen_agents)
         for agent in chosen:
             agent.state = config.State.INFECTED
 
     def recover_infected(self):
         """ Returns number of infected individuals who will recovered.
         The number is a drawn sample from a binomial distribution. """
-        tot_inf = sum(1 for a in self.agents if a.state == config.State.INFECTED)
-        no_inf_to_rec = np.random.binomial(tot_inf, self.sigma)
 
-        return no_inf_to_rec
+        inf_agents = [agent for agent in self.agents if agent.state == config.State.INFECTED]
+
+        no_inf_agents = len(inf_agents)
+        no_chosen_agents = np.random.binomial(no_inf_agents, config.sigma)
+
+        chosen = self.random.sample(inf_agents, no_chosen_agents)
+        for agent in chosen:
+            agent.state = config.State.RECOVERED
 
     def step(self):
         """ Advances the model by one step (one day) """
@@ -67,6 +84,6 @@ class DiseaseModel(Model):
         self.write_csv_row()
 
 if __name__ == "__main__":
-    starter_model = DiseaseModel(n=1000, beta= 0.1, sigma=1, width=10, height=10)
-    for _ in range(30):
+    starter_model = DiseaseModel(n=1000, beta= 10, sigma=1, width=10, height=10)
+    for _ in range(5):
         starter_model.step()
