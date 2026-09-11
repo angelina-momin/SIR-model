@@ -35,14 +35,10 @@ class DiseaseModel(Model):
         #     y = self.random.randrange(self.grid.height)
         #     self.grid.place_agent(human, (x, y))
 
-    def step(self):
-        """ Advances the model by one step (one day) """
+    def write_csv_row(self):
+        # Calculate totals in each SIR compartment and add data row to csv
 
-        self.agents.shuffle_do("step") # Reorders the list of agent objects
-
-        # At each step, calculate totals in each SIR compartment
-        # Add totals to the csv path
-        tick = 1
+        tick = int(self.time)
         tot_sus = sum(1 for a in self.agents if a.state == config.State.SUSCEPTIBLE)
         tot_inf = sum(1 for a in self.agents if a.state == config.State.INFECTED)
         tot_rec = sum(1 for a in self.agents if a.state == config.State.RECOVERED)
@@ -51,8 +47,15 @@ class DiseaseModel(Model):
             writer = csv.writer(file)
             writer.writerow([tick, tot_sus, tot_inf, tot_rec])
 
+
+    def step(self):
+        """ Advances the model by one step (one day) """
+
+        self.agents.shuffle_do("step") # Reorders the list of agent objects
+        self.write_csv_row()
+
 if __name__ == "__main__":
-    starter_model = DiseaseModel(n=10, width=10, height=10)
+    starter_model = DiseaseModel(n=30, width=10, height=10)
     starter_model.step()
     starter_model.step()
     starter_model.step()
