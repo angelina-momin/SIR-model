@@ -22,20 +22,20 @@ class Human(Agent):
 
     def susceptible_to_infected(self):
         """ Susceptible individuals become infected """
-        if self.state = State.SUSCEPTIBLE:
+        if self.state == State.SUSCEPTIBLE:
             self.state = State.INFECTED
 
 
     def infected_to_recovered(self):
         """ Infected individuals recover """
-        if self.state = State.INFECTED:
+        if self.state == State.INFECTED:
             self.state = State.RECOVERED
 
     def update_color(self):
         """ Updates agents' color based on which SIR compartment
         they belong to """
 
-        self.color = DICT_COLOR_AGENTS[self.state]
+        self.color = config.DICT_COLOR_AGENTS[self.state]
 
     def step(self):
         """ The behavior of the agents in a single step of the model """
