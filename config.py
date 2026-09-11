@@ -20,6 +20,9 @@ DICT_COLOR_AGENTS = {
 }
 
 # Model settings
-TOT_POP = 100 # total population
 GRID_WIDTH = 10
 GRID_HEIGHT = 10
+
+# Output dir
+OUTPUT_DIR = "data/"
+OUTPUT_HEADERS = ["tick", "tot_sus", "tot_inf", "tot_rec"]
