@@ -5,12 +5,11 @@ AGENT_SHAPE = "circle"
 AGENT_RADIUS = 0.5
 AGENT_FILL = "true"
 
-# The keys relate to the integers representing the SIR compartments
-# Refer to the class State
+# Agent display color based on compartments
 DICT_COLOR_AGENTS = {
-    0: "green", # susceptible
-    1: "red", # infected
-    2: "yellow" # recovered
+    State.SUSCEPTIBLE: "green", 
+    State.INFECTED: "red",
+    State.RECOVERED: "yellow" 
 }
 
 # Model settings
