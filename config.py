@@ -1,4 +1,11 @@
-# File to store project sertings
+from enum import Enum
+
+# File to store project settings
+
+class State(Enum):
+    SUSCEPTIBLE = 0
+    INFECTED = 1
+    RECOVERED = 2
 
 # Agent display settings
 AGENT_SHAPE = "circle"
