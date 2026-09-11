@@ -36,7 +36,7 @@ class DiseaseModel(Model):
         #     self.grid.place_agent(human, (x, y))
 
     def write_csv_row(self):
-        # Calculate totals in each SIR compartment and add data row to csv
+        """ Calculates totals in each SIR compartment and adds a data row to csv """
 
         tick = int(self.time)
         tot_sus = sum(1 for a in self.agents if a.state == config.State.SUSCEPTIBLE)
