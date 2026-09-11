@@ -3,13 +3,14 @@ import csv
 from mesa import Model
 from mesa.discrete_space import OrthogonalMooreGrid 
 # from mesa.time import RandomActivation
+import numpy as np
 
 from agents import Human
 import config
 
 class DiseaseModel(Model):
     """ Environment in which the human agents live and transmit diseases"""
-    def __init__(self, n, width, height, rng=None):
+    def __init__(self, n, beta, sigma, width, height, rng=None):
         super().__init__(rng=rng)
         self.no_agents = n
         # self.schedule = RandomActivation(self) # Random selection of agents
@@ -47,6 +48,21 @@ class DiseaseModel(Model):
             writer = csv.writer(file)
             writer.writerow([tick, tot_sus, tot_inf, tot_rec])
 
+    def draw_num_sus_to_infect(self):
+        """ Returns number of susceptible individuals who will be infected.
+        The number is a drawn sample from a binomial distribution. """
+        tot_sus = sum(1 for a in self.agents if a.state == config.State.SUSCEPTIBLE)
+        no_sus_to_inf = np.random.binomial(tot_sus, self.beta)
+
+        return no_sus_to_inf
+
+    def draw_num_inf_to_recover(self):
+        """ Returns number of infected individuals who will recovered.
+        The number is a drawn sample from a binomial distribution. """
+        tot_inf = sum(1 for a in self.agents if a.state == config.State.INFECTED)
+        no_inf_to_rec = np.random.binomial(tot_inf, self.sigma)
+
+        return no_inf_to_rec
 
     def step(self):
         """ Advances the model by one step (one day) """
@@ -55,7 +71,7 @@ class DiseaseModel(Model):
         self.write_csv_row()
 
 if __name__ == "__main__":
-    starter_model = DiseaseModel(n=30, width=10, height=10)
+    starter_model = DiseaseModel(n=1000, beta= 10, sigma=1, width=10, height=10)
     starter_model.step()
     starter_model.step()
     starter_model.step()
