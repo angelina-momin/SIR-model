@@ -20,10 +20,6 @@ class Human(Agent):
 
         self.update_color()
 
-    def move(self):
-        """ Move the agent to a random neighboring cell """
-        self.cell = self.cell.neighborhood.select_random_cell()
-
     def susceptible_to_infected(self):
         """ Susceptible individuals become infected """
         if self.state = State.SUSCEPTIBLE:
@@ -44,7 +40,6 @@ class Human(Agent):
     def step(self):
         """ The behavior of the agents in a single step of the model """
        
-        self.move()
         self.susceptible_to_infected()
         self.infected_to_recovered()
         self.update_color()
