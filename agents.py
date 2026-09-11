@@ -14,16 +14,13 @@ class Human(Agent):
 
         self.update_color()
 
-    def susceptible_to_infected(self):
+    def change_state(self):
         """ Susceptible individuals become infected """
         if self.state == config.State.SUSCEPTIBLE:
             self.state = config.State.INFECTED
             print(f"Hi, I am  agent {self.unique_id!s} and I just got infected")
 
-
-    def infected_to_recovered(self):
-        """ Infected individuals recover """
-        if self.state == config.State.INFECTED:
+        elif self.state == config.State.INFECTED:
             self.state = config.State.RECOVERED
             print(f"Hi, I am  agent {self.unique_id!s} and I just recovered")
 
@@ -35,8 +32,11 @@ class Human(Agent):
 
     def step(self):
         """ The behavior of the agents in a single step of the model """
-       
-        self.susceptible_to_infected()
-        self.infected_to_recovered()
+
+        print(f"Hi, I am  agent {self.unique_id!s}")
+        self.change_state()
         self.update_color()
+        print(f"My state is {self.state} and my color {self.color}")
+
+
         
