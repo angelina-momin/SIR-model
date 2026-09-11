@@ -44,7 +44,7 @@ class DiseaseModel(Model):
 
     def calculate_p_infc(self):
         tot_inf = sum(1 for a in self.agents if a.state == config.State.INFECTED)
-        p = self.beta * tot_inf / self.no_agents
+        p =  1 - np.exp(- self.beta * tot_inf / self.no_agents)
         return p
 
     def infect_susceptible(self):
@@ -63,14 +63,18 @@ class DiseaseModel(Model):
         for agent in chosen:
             agent.state = config.State.INFECTED
 
+        # Keeping track of individuals who just became infected
+        # They cannot recover in the same time step
+        self.agents_just_infected = chosen
+
     def recover_infected(self):
         """ Returns number of infected individuals who will recovered.
         The number is a drawn sample from a binomial distribution. """
 
-        inf_agents = [agent for agent in self.agents if agent.state == config.State.INFECTED]
+        inf_agents = [agent for agent in self.agents if agent.state == config.State.INFECTED and agent not in self.agents_just_infected]
 
         no_inf_agents = len(inf_agents)
-        no_chosen_agents = np.random.binomial(no_inf_agents, config.sigma)
+        no_chosen_agents = np.random.binomial(no_inf_agents, self.sigma)
 
         chosen = self.random.sample(inf_agents, no_chosen_agents)
         for agent in chosen:
@@ -80,10 +84,11 @@ class DiseaseModel(Model):
         """ Advances the model by one step (one day) """
 
         self.infect_susceptible()
+        self.recover_infected()
         self.agents.shuffle_do("step") # Reorders the list of agent objects
         self.write_csv_row()
 
 if __name__ == "__main__":
     starter_model = DiseaseModel(n=1000, beta= 10, sigma=1, width=10, height=10)
-    for _ in range(5):
+    for _ in range(10):
         starter_model.step()
