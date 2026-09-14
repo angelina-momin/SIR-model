@@ -1,8 +1,6 @@
 import csv
 
 from mesa import Model
-from mesa.discrete_space import OrthogonalMooreGrid 
-# from mesa.time import RandomActivation
 import numpy as np
 
 from agents import Human
