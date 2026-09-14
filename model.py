@@ -98,7 +98,3 @@ class DiseaseModel(Model):
         self.recover_infected()
         self.agents.shuffle_do("step") # Reorders the list of agent objects
         self.write_csv_row()
-
-if __name__ == "__main__":
-    starter_model = DiseaseModel(n=1000, beta= 10, sigma=1)
-    starter_model.run_until(10)
