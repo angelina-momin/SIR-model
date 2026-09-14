@@ -1,5 +1,4 @@
 import config
-from config import DICT_TEST_PARAMS as dict
 from model import DiseaseModel
 
 import unittest
@@ -13,11 +12,11 @@ class TestNonNegativePopulation(unittest.TestCase):
     # Initializing objects and variables that will be used in each test
     def setUp(self):
         self.test_model = DiseaseModel(
-            n=dict["tot_pop"], 
-            beta= dict["beta"], 
-            sigma= dict["sigma"], 
-            no_initial_infc=dict["no_initial_infc"], 
-            output_file_name=dict["output_file_name"]
+            tot_pop=1000, 
+            beta= 10, 
+            sigma=1, 
+            no_initial_infc=1, 
+            output_file_name="test_nonneg_pop"
         )
 
         self.n_model_steps = 10
