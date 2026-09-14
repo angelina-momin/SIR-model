@@ -19,10 +19,6 @@ DICT_COLOR_AGENTS = {
     State.RECOVERED: "yellow" 
 }
 
-# Model settings
-GRID_WIDTH = 10
-GRID_HEIGHT = 10
-
 # Output dir
 OUTPUT_DIR = "data/"
 OUTPUT_HEADERS = ["tick", "tot_sus", "tot_inf", "tot_rec"]
