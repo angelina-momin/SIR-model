@@ -1,4 +1,5 @@
 import csv
+import os
 
 from mesa import Model
 import numpy as np
@@ -8,7 +9,7 @@ import config
 
 class DiseaseModel(Model):
     """ Environment in which the human agents live and transmit diseases"""
-    def __init__(self, n, beta, sigma, width, height, rng=None):
+    def __init__(self, n, beta, sigma, no_initial_infc=1, output_file_name = "output.csv", rng=None):
         super().__init__(rng=rng)
 
         self.beta = beta
@@ -18,18 +19,23 @@ class DiseaseModel(Model):
         self.running =True # Necessary to run the model
         Human.create_agents(model=self, n=n)
 
-        # Assuming only one individual is infected initially
-        infc_agent = self.random.sample(list(self.agents), 1)[0]
+        # Creating initial number of infections
+        infc_agent = self.random.sample(population=list(self.agents), k=no_initial_infc)[0]
         infc_agent.state = config.State.INFECTED
 
         # Initializing the output file
-        self.output_csv_path = f'{config.OUTPUT_DIR}/output.csv'
+        self.output_csv_path = f'{config.OUTPUT_DIR}{output_file_name}.csv'
+
+        # Create the output dir if it does not exist
+        if not os.path.exists(config.OUTPUT_DIR):
+            os.makedirs(config.OUTPUT_DIR)
+
         with open(self.output_csv_path, mode="w", newline='') as file:
             writer = csv.writer(file)
             writer.writerow(config.OUTPUT_HEADERS)
 
     def write_csv_row(self):
-        """ Calculates totals in each SIR compartment and adds a data row to csv """
+        """ Calculates totals in each SIR compartment and adds a data row to csv file """
 
         tick = int(self.time)
         tot_sus = sum(1 for a in self.agents if a.state == config.State.SUSCEPTIBLE)
@@ -40,24 +46,27 @@ class DiseaseModel(Model):
             writer = csv.writer(file)
             writer.writerow([tick, tot_sus, tot_inf, tot_rec])
 
-    def calculate_p_infc(self):
+    def calculate_p_si(self):
+        """ Calculates the probability of a susceptible human becoming infected"""
         tot_inf = sum(1 for a in self.agents if a.state == config.State.INFECTED)
-        p =  1 - np.exp(- self.beta * tot_inf / self.no_agents)
-        return p
+        p_si =  1 - np.exp(- self.beta * tot_inf / self.no_agents)
+        return p_si
 
     def infect_susceptible(self):
         """ Returns number of susceptible individuals who will be infected.
         The number is a drawn sample from a binomial distribution. """
 
-        p_infc = self.calculate_p_infc()
+        p_infc = self.calculate_p_si()
 
         sus_agents = [agent for agent in self.agents if agent.state == config.State.SUSCEPTIBLE]
         
         no_sus_agents = len(sus_agents)
-        no_chosen_agents = np.random.binomial(no_sus_agents, p_infc)
+
+        # Determing the number of susceptible agents to infect
+        no_chosen_agents = np.random.binomial(n=no_sus_agents, p=p_infc)
 
         # Pick random susceptible agents and change state
-        chosen = self.random.sample(sus_agents, no_chosen_agents)
+        chosen = self.random.sample(population=sus_agents, k=no_chosen_agents)
         for agent in chosen:
             agent.state = config.State.INFECTED
 
@@ -70,11 +79,12 @@ class DiseaseModel(Model):
         The number is a drawn sample from a binomial distribution. """
 
         inf_agents = [agent for agent in self.agents if agent.state == config.State.INFECTED and agent not in self.agents_just_infected]
-
         no_inf_agents = len(inf_agents)
-        no_chosen_agents = np.random.binomial(no_inf_agents, self.sigma)
 
-        chosen = self.random.sample(inf_agents, no_chosen_agents)
+        # Determing the number of infected agents to recover
+        no_chosen_agents = np.random.binomial(n=no_inf_agents, p=self.sigma)
+
+        chosen = self.random.sample(population=inf_agents, k=no_chosen_agents)
         for agent in chosen:
             agent.state = config.State.RECOVERED
 
@@ -87,5 +97,5 @@ class DiseaseModel(Model):
         self.write_csv_row()
 
 if __name__ == "__main__":
-    starter_model = DiseaseModel(n=1000, beta= 10, sigma=1, width=10, height=10)
+    starter_model = DiseaseModel(n=1000, beta= 10, sigma=1)
     starter_model.run_until(10)
