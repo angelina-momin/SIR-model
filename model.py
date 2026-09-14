@@ -90,5 +90,4 @@ class DiseaseModel(Model):
 
 if __name__ == "__main__":
     starter_model = DiseaseModel(n=1000, beta= 10, sigma=1, width=10, height=10)
-    for _ in range(10):
-        starter_model.step()
+    starter_model.run_until(10)
