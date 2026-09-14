@@ -30,10 +30,13 @@ class DiseaseModel(Model):
         if not os.path.exists(config.OUTPUT_DIR):
             os.makedirs(config.OUTPUT_DIR)
 
+        # Adding headers and data for first day to csv
         with open(self.output_csv_path, mode="w", newline='') as file:
             writer = csv.writer(file)
             writer.writerow(config.OUTPUT_HEADERS)
 
+        self.write_csv_row()
+            
     def write_csv_row(self):
         """ Calculates totals in each SIR compartment and adds a data row to csv file """
 
