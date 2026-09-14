@@ -19,9 +19,11 @@ class DiseaseModel(Model):
         self.running =True # Necessary to run the model
         Human.create_agents(model=self, n=n)
 
-        # Creating initial number of infections
-        infc_agent = self.random.sample(population=list(self.agents), k=no_initial_infc)[0]
-        infc_agent.state = config.State.INFECTED
+        # Creating initial number of infections in random agents
+        chosen_sus_agent_list = self.random.sample(population=list(self.agents), k=no_initial_infc)
+
+        for sus_agent in chosen_sus_agent_list:
+            sus_agent.state = config.State.INFECTED
 
         # Initializing the output file
         self.output_csv_path = f'{config.OUTPUT_DIR}{output_file_name}.csv'
@@ -98,7 +100,3 @@ class DiseaseModel(Model):
         self.recover_infected()
         self.agents.shuffle_do("step") # Reorders the list of agent objects
         self.write_csv_row()
-
-if __name__ == "__main__":
-    starter_model = DiseaseModel(n=1000, beta= 10, sigma=1)
-    starter_model.run_until(10)

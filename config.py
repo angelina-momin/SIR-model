@@ -14,14 +14,10 @@ AGENT_FILL = "true"
 
 # Agent display color based on compartments
 DICT_COLOR_AGENTS = {
-    State.SUSCEPTIBLE: "green", 
-    State.INFECTED: "red",
-    State.RECOVERED: "yellow" 
+    State.SUSCEPTIBLE: "blue", 
+    State.INFECTED: "orange",
+    State.RECOVERED: "green" 
 }
-
-# Model settings
-GRID_WIDTH = 10
-GRID_HEIGHT = 10
 
 # Output dir
 OUTPUT_DIR = "data/"
