@@ -9,6 +9,7 @@ import config
 
 class DiseaseModel(Model):
     """ Environment in which the human agents live and transmit diseases"""
+
     def __init__(self, tot_pop, beta, sigma, no_initial_infc=1, output_file_name = "output.csv", rng=None):
         super().__init__(rng=rng)
 
@@ -42,7 +43,8 @@ class DiseaseModel(Model):
     def write_csv_row(self):
         """ Calculates totals in each SIR compartment and adds a data row to csv file """
 
-        tick = int(self.time)
+        tick = int(self.time) # Tick is the time step
+
         tot_sus = sum(1 for a in self.agents if a.state == config.State.SUSCEPTIBLE)
         tot_inf = sum(1 for a in self.agents if a.state == config.State.INFECTED)
         tot_rec = sum(1 for a in self.agents if a.state == config.State.RECOVERED)
@@ -53,13 +55,14 @@ class DiseaseModel(Model):
 
     def calculate_p_si(self):
         """ Calculates the probability of a susceptible human becoming infected"""
+
         tot_inf = sum(1 for a in self.agents if a.state == config.State.INFECTED)
         p_si =  1 - np.exp(- self.beta * tot_inf / self.tot_pop)
         return p_si
 
     def infect_susceptible(self):
-        """ Returns number of susceptible individuals who will be infected.
-        The number is a drawn sample from a binomial distribution. """
+        """ Infects a number of susceptible agents. The number of susceptible agents to infect
+        is a drawn sample from a binomial distribution. """
 
         p_infc = self.calculate_p_si()
 
@@ -70,15 +73,15 @@ class DiseaseModel(Model):
         # Determing the number of susceptible agents to infect
         no_chosen_agents = np.random.binomial(n=no_sus_agents, p=p_infc)
 
-        # Pick random susceptible agents and change state
+        # Pick random susceptible agents and change state and infected_today
         chosen = self.random.sample(population=sus_agents, k=no_chosen_agents)
         for agent in chosen:
             agent.state = config.State.INFECTED
             agent.infected_today = True 
 
     def recover_infected(self):
-        """ Returns number of infected individuals who will recovered.
-        The number is a drawn sample from a binomial distribution. """
+        """ Recovers a number of infects agents. The number of infected agents to recover
+        is a drawn sample from a binomial distribution. """
 
         # Pool agents to recover only include agents who were not infected today- this ensures that agent does not move two 
         # compartments in one time stamp
@@ -86,7 +89,7 @@ class DiseaseModel(Model):
         no_inf_agents = len(inf_agents)
 
         # Determing the number of infected agents to recover
-        no_chosen_agents = np.random.binomial(n=no_inf_agents, p=self.sigma)
+        no_chosen_agents = np.random.binomial(n=no_inf_agents, p=1 - np.exp(-self.sigma))
 
         chosen = self.random.sample(population=inf_agents, k=no_chosen_agents)
         for agent in chosen:
