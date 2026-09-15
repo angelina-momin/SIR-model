@@ -10,7 +10,7 @@ The number of susceptible agents, $N_{S}$ to infect at a single time step is a
 sample drawn from the binomial distribution
 
 $$
-Binomial(N_S, 1 - (e^{-\frac{beta * N_I }{N}}))
+Binomial(N_S, 1 - e^{-\frac{beta * N_I }{N}})
 $$
 
 where 
