@@ -1,5 +1,5 @@
 import config
-from model import DiseaseModel
+from src.model import DiseaseModel
 
 import unittest
 
