@@ -1,7 +1,7 @@
 # SIR-model
 
 ## The model
-This project models a agent-based SIR model to simulate the spread of a disease in population of size $N$ over time $t$.
+This project models an agent-based discrete time stochastic SIR model to simulate the spread of a disease in population of size $N$ over time $t$.
 In the model, each individual belongs to one of these three compartments: 
 susceptible ($S$), infected ($I$) and recovered ($R$).
 
@@ -35,15 +35,27 @@ $$
 \sigma = \text{Rate that infected individuals recover}
 $$
 
-## Stochastic model
-
-Imagine that in a small period of time $dt$ the chance of an event happening
-follows a Bernoulli trial.
-
-For discrete time step of size $dt$
-
 ## How to run
 
+Optional: Create a virtual environment first before installing the required packages. 
+
+1. Install the required packages by running the following command in your terminal:
+
+`pip install -r requirements.txt`
+
+2. Open the Jupyter notebook `run_model.ipynb` and adjust the following model inputs as necessary.
+
+```
+START_POPULATION = 1000
+BETA = 10
+SIGMA = 1
+N_STEPS_MODEL = 10 # Number of time steps to run the model
+OUTPUT_FILE_NAME = "output" # File extension not required. The output file will be saved to data folder
+NO_INITIAL_INFECTIONS = 1
+```
+
+3. Run all the cells of the notebooks. 
+An output file will be created with the results of the run in the `data folder` and a plot of the SIR populations will be generated in the notebook as shown below.W
 
 ## Testing 
 
@@ -51,3 +63,16 @@ The 'tests' folder contain unit tests that GitHub automatically runs in the back
 This ensures that each time the model's code is changed i.e. added new features or the bug fixes, 
 we automatically check that model still yields expectable results and
 its basic functionalities are working as expected.
+
+At the moment, the folder contains the following tests:
+
+1. Test to check that none of the SIR populations are negative.
+
+2. Test to check that the sum of the populations 
+for the three compartments are always
+equal to the model's total population.
+
+
+For each of the tests, the model is initialized and run a number of steps as given by `n_model_steps`. 
+The test assertions are then checked for each
+of those time step of the model. 
