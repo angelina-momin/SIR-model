@@ -56,15 +56,19 @@ visualize the model results with a graph of the populations of each compartment 
 
 ## How to run
 
-Optional: Create a virtual environment first before installing the required packages. 
+1. Clone the repository onto your device by running the following command in your terminal:
 
-1. Install the required packages by running the following command in your terminal:
+```
+git clone https://github.com/angelina-momin/SIR-model.git
+```
+
+2. Go to the directory where you cloned the project. Then install the required packages* by running the following command in your terminal:
 
 ```
 pip install -r requirements.txt
 ```
 
-2. Open the Jupyter notebook `run_model.ipynb` and adjust the following model inputs as necessary.
+3. Open the Jupyter notebook `run_model.ipynb` and adjust the following model inputs as necessary.
 
 ```
 START_POPULATION = 1000
@@ -77,8 +81,10 @@ NO_INITIAL_INFECTIONS = 1
 NO_RUNS = 10 # Number of times to run the model
 ```
 
-3. Run all the cells of the notebooks. 
-An output file will be created with the results of the run in the `data` folder and a plot of the SIR populations will be generated in the notebook as shown below.W
+4. Run all the cells of the notebooks. 
+An output file will be created with the results of the run in the `data` folder and a plot of the SIR populations will be generated in the notebook as shown below.
+
+*Optional but recommended: Create a virtual environment first before installing the required packages.
 
 ## Testing 
 
