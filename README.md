@@ -27,7 +27,7 @@ The number of infected agents, $N_{I}$ to recover at a single time step is a
 sample drawn from the binomial distribution
 
 $$
-Binomial(N_I, \sigma)
+Binomial(N_I, 1-e^{-\sigma})
 $$
 
 where 
