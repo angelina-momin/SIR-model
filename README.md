@@ -73,6 +73,8 @@ SIGMA = 1
 N_STEPS_MODEL = 10 # Number of time steps to run the model
 OUTPUT_FILE_NAME = "output" 
 NO_INITIAL_INFECTIONS = 1
+
+NO_RUNS = 10 # Number of times to run the model
 ```
 
 3. Run all the cells of the notebooks. 
