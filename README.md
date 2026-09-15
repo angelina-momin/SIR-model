@@ -1,7 +1,8 @@
 # SIR-model
 
 ## The model
-This project models an agent-based discrete time stochastic SIR model to simulate the spread of a disease in population of size $N$ over time $t$.
+This project models an agent-based discrete time stochastic SIR model to simulate the spread of a disease in population of size $N$ over time $t$. 
+The project was implemented using the python package Mesa. 
 In the model, each individual belongs to one of these three compartments: 
 susceptible ($S$), infected ($I$) and recovered ($R$).
 
@@ -35,13 +36,31 @@ $$
 \sigma = \text{Rate that infected individuals recover}
 $$
 
+## Project structure
+
+- The `src` folder contains the source code. This folder contains two files: 
+1. `model.py` which contains the `DiseaseModel` class and initializes the model with population parameters and 
+creates the human agents. In this file you will also find the code for what the model does in each time step.
+
+2. `agent.py` which contains the `Human` class which are the agents of the model. 
+
+- The `tests` folder which contain the unit tests for the model.
+
+- A jupyter notebook called `run_model.ipynb` where users can enter model parameters, run the model and
+visualize the model results with a graph of the populations of each compartment against time.
+
+- `config.py` contains model configuration such as the class `State`, the color of the agents, path for output etc.
+
+
 ## How to run
 
 Optional: Create a virtual environment first before installing the required packages. 
 
 1. Install the required packages by running the following command in your terminal:
 
-`pip install -r requirements.txt`
+```
+pip install -r requirements.txt
+```
 
 2. Open the Jupyter notebook `run_model.ipynb` and adjust the following model inputs as necessary.
 
@@ -55,12 +74,12 @@ NO_INITIAL_INFECTIONS = 1
 ```
 
 3. Run all the cells of the notebooks. 
-An output file will be created with the results of the run in the `data folder` and a plot of the SIR populations will be generated in the notebook as shown below.W
+An output file will be created with the results of the run in the `data` folder and a plot of the SIR populations will be generated in the notebook as shown below.W
 
 ## Testing 
 
 The 'tests' folder contain unit tests that GitHub automatically runs in the background.
-This ensures that each time the model's code is changed i.e. added new features or the bug fixes, 
+This ensures that each time the model's code is changed i.e. added new features o bug fixes, 
 we automatically check that model still yields expectable results and
 its basic functionalities are working as expected.
 
