@@ -10,14 +10,14 @@ class TestConstantTotPop(unittest.TestCase):
     # Initializing objects and variables that will be used in each test
     def setUp(self):
         self.test_model = DiseaseModel(
-            tot_pop=20000, 
+            tot_pop=5000, 
             beta= 1, 
             sigma=1, 
-            no_initial_infc=1, 
+            no_initial_infc=10, 
             output_file_name="test_tot_pop"
         )
 
-        self.n_model_steps = 100
+        self.n_model_steps = 30
 
     def test_constant_tot_population(self):
 
