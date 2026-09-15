@@ -1,6 +1,6 @@
 from enum import Enum
 
-# File to store project parameters
+# File to store project parameters and variables
 
 class State(Enum):
     SUSCEPTIBLE = 0
