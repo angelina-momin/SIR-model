@@ -82,10 +82,12 @@ An output file will be created with the results of the run in the `data` folder 
 
 ## Testing 
 
-The 'tests' folder contain unit tests that GitHub automatically runs in the background.
-This ensures that each time the model's code is changed i.e. added new features o bug fixes, 
-we automatically check that model still yields expectable results and
-its basic functionalities are working as expected.
+The 'tests' folder contain unit tests that help ensure the model's behavior and results are as expected when the code is changed i.e. added new features or bug fixes.
+
+To run the test use the following command in the terminal
+```
+python -m pytest
+```
 
 At the moment, the folder contains the following tests:
 
