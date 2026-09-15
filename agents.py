@@ -12,6 +12,10 @@ class Human(Agent):
         # Initially all agents are susceptible
         self.state = config.State.SUSCEPTIBLE
 
+        # Boolean to check whether the agent was infected today
+        # Used to ensure the same agent does not recover in the same time stamp
+        self.infected_today = False 
+
         self.update_color()
 
     def update_color(self):
@@ -24,4 +28,6 @@ class Human(Agent):
         """ The behavior of the agents in a single step of the model """
 
         self.update_color()
+        # Infected today is set to False for the end of the day as we move to the next day
+        self.infected_today = False
         

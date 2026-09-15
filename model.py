@@ -9,15 +9,15 @@ import config
 
 class DiseaseModel(Model):
     """ Environment in which the human agents live and transmit diseases"""
-    def __init__(self, n, beta, sigma, no_initial_infc=1, output_file_name = "output.csv", rng=None):
+    def __init__(self, tot_pop, beta, sigma, no_initial_infc=1, output_file_name = "output.csv", rng=None):
         super().__init__(rng=rng)
 
         self.beta = beta
         self.sigma = sigma
-        self.no_agents = n
+        self.tot_pop = tot_pop
         
         self.running =True # Necessary to run the model
-        Human.create_agents(model=self, n=n)
+        Human.create_agents(model=self, n=tot_pop)
 
         # Creating initial number of infections in random agents
         chosen_sus_agent_list = self.random.sample(population=list(self.agents), k=no_initial_infc)
@@ -54,7 +54,7 @@ class DiseaseModel(Model):
     def calculate_p_si(self):
         """ Calculates the probability of a susceptible human becoming infected"""
         tot_inf = sum(1 for a in self.agents if a.state == config.State.INFECTED)
-        p_si =  1 - np.exp(- self.beta * tot_inf / self.no_agents)
+        p_si =  1 - np.exp(- self.beta * tot_inf / self.tot_pop)
         return p_si
 
     def infect_susceptible(self):
@@ -74,16 +74,15 @@ class DiseaseModel(Model):
         chosen = self.random.sample(population=sus_agents, k=no_chosen_agents)
         for agent in chosen:
             agent.state = config.State.INFECTED
-
-        # Keeping track of individuals who just became infected
-        # They cannot recover in the same time step
-        self.agents_just_infected = chosen
+            agent.infected_today = True 
 
     def recover_infected(self):
         """ Returns number of infected individuals who will recovered.
         The number is a drawn sample from a binomial distribution. """
 
-        inf_agents = [agent for agent in self.agents if agent.state == config.State.INFECTED and agent not in self.agents_just_infected]
+        # Pool agents to recover only include agents who were not infected today- this ensures that agent does not move two 
+        # compartments in one time stamp
+        inf_agents = [agent for agent in self.agents if agent.state == config.State.INFECTED and agent.infected_today == False]
         no_inf_agents = len(inf_agents)
 
         # Determing the number of infected agents to recover
