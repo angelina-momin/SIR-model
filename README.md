@@ -1,36 +1,36 @@
 # SIR-model
-
-## The model
 This project models an agent-based discrete time stochastic SIR model to simulate the spread of a disease in population of size $N$ over time $t$. 
 The project was implemented using the python package Mesa. 
+
+## The model
 In the model, each individual belongs to one of these three compartments: 
 susceptible ($S$), infected ($I$) and recovered ($R$).
 
-The deterministic differential equations governing the model are:
+The number of susceptible agents, $N_{S}$ to infect at a single time step is a 
+sample drawn from the binomial distribution
 
-$ 
-\begin{equation}
-\frac{dS}{dt} = -\beta \times S \times \frac{I}{N}
-\end{equation}
-$
-
-$ 
-\begin{equation}
-\frac{dI}{dt} = \beta \times S \times \frac{I}{N} -\sigma I
-\end{equation}
-$
-
-$ 
-\begin{equation}
-\frac{dR}{dt} = \sigma I
-\end{equation}
-$
+$$
+Binomial(N_S, 1 - (e^{-\frac{beta * N_I }{N}}))
+$$
 
 where 
 
 $$ 
 \beta = \text{Rate per interaction that susceptible individuals become infected}
 $$
+
+$$ 
+N_I = \text{Number of infected individuals}
+$$
+
+The number of infected agents, $N_{I}$ to recover at a single time step is a
+sample drawn from the binomial distribution
+
+$$
+Binomial(N_I, \sigma)
+$$
+
+where 
 
 $$
 \sigma = \text{Rate that infected individuals recover}
