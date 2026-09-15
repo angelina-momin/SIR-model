@@ -3,7 +3,7 @@ from mesa import Agent
 import config
 
 # Creating a human agent with three states- susceptible, infected and
-# recovered represented as booleans
+# recovered represented by integers
 class Human(Agent):
     def __init__(self, model):
         """ Initializes a Human instance"""
