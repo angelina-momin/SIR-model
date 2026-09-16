@@ -5,6 +5,7 @@ The project was implemented using the python package Mesa.
 ## The model
 In the model, each individual belongs to one of these three compartments: 
 susceptible ($S$), infected ($I$) and recovered ($R$).
+In this model, recovered individuals are considered to be immune to the disease.
 
 The number of susceptible agents, $N_{S}$ to infect at a single time step is a 
 sample drawn from the binomial distribution
