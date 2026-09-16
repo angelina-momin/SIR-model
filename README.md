@@ -1,5 +1,5 @@
 # SIR-model
-This project models an agent-based discrete time stochastic SIR model to simulate the spread of a disease in population of size $N$ over time $t$. 
+This project models an agent-based discrete stochastic SIR model to simulate the spread of a disease in population of size $N$ over time $t$. 
 The project was implemented using the python package Mesa. 
 
 ## The model
