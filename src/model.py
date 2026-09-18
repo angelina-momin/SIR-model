@@ -10,18 +10,21 @@ import config
 class DiseaseModel(Model):
     """ Environment in which the human agents live and transmit diseases"""
 
-    def __init__(self, tot_pop, beta, sigma, no_initial_infc=1, output_file_name = "output.csv", rng=None):
+    def __init__(self, tot_pop:int, beta, sigma, no_initial_infc:int = 1, output_file_name:str = "output.csv", rng=None):
         super().__init__(rng=rng)
 
         self.beta = beta
         self.sigma = sigma
         self.tot_pop = tot_pop
+        self.no_initial_infc = no_initial_infc
+
+        self.verify_model_inputs()
         
         self.running =True # Necessary to run the model
         Human.create_agents(model=self, n=tot_pop)
 
         # Creating initial number of infections in random agents
-        chosen_sus_agent_list = self.random.sample(population=list(self.agents), k=no_initial_infc)
+        chosen_sus_agent_list = self.random.sample(population=list(self.agents), k=self.no_initial_infc)
 
         for sus_agent in chosen_sus_agent_list:
             sus_agent.state = config.State.INFECTED
@@ -39,6 +42,24 @@ class DiseaseModel(Model):
             writer.writerow(config.OUTPUT_HEADERS)
 
         self.write_csv_row()
+
+    def verify_model_inputs(self): 
+
+        if not isinstance(self.tot_pop, int):
+            raise TypeError("Total population must be an integer")
+
+        if not isinstance(self.no_initial_infc, int):
+            raise TypeError("Number of initial infections must be an integer")
+
+        if self.tot_pop < 0:
+            raise ValueError("The total population cannot be negative")
+
+        if self.no_initial_infc < 0:
+            raise ValueError("The number of initial infections cannot be negative")
+
+        if not self.tot_pop > self.no_initial_infc:
+            raise ValueError("The number of initial infections exceeds the total population")
+
             
     def write_csv_row(self):
         """ Calculates totals in each SIR compartment and adds a data row to csv file """
